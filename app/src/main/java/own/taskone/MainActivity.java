@@ -1,11 +1,19 @@
 package own.taskone;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.Image;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +38,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
    RecyclerView myrecyler_view;
     DrawerLayout mydrawerlayout;
     ArrayList<Options> options;
-    ImageView mymenu;
+    ImageView mymenu,myswipeimage;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -45,6 +53,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mydrawerlayout = (DrawerLayout)findViewById(R.id.mydrawerlayout);
+        myswipeimage = (ImageView)findViewById(R.id.myswipeimage);
         mymenu  = (ImageView)findViewById(R.id.mymenu);
         mymenu.setOnClickListener(MainActivity.this);
 
@@ -102,7 +111,28 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         });
       }
 
-      //TABS SETUP HERE ..
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(message,new IntentFilter("send"));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(message);
+    }
+    private BroadcastReceiver message = new BroadcastReceiver() {
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int image = intent.getIntExtra("imgsrc",R.id.myswipeimage);
+            myswipeimage.setBackground(getResources().getDrawable(image));
+        }
+    };
+
+    //TABS SETUP HERE ..
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);

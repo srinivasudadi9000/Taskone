@@ -1,8 +1,10 @@
 package own.taskone;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -52,16 +54,20 @@ private ListView myVideos_lv;
         myVideos_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ImageView swipe = (ImageView) view.findViewById(R.id.myimage);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    swipe.setBackground(getResources().getDrawable(sources.imageid[position]));
                     Toast.makeText(getContext(),videoses.get(position).getVideodes(),Toast.LENGTH_SHORT).show();
+                    sendBroadcast(sources.imageid[position]);
                 }
 
             }
         });
         return view;
         // Inflate the layout for this fragment
+    }
+    public void sendBroadcast(int i){
+        Intent intent = new Intent("send");
+        intent.putExtra("imgsrc",i);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
     }
 
 
