@@ -33,12 +33,26 @@
 
       </android.support.v4.view.ViewPager>
    </LinearLayout>
-  <android.support.v7.widget.RecyclerView
-     android:layout_marginTop="50dp"
-     android:id="@+id/myrecyler_view"
-     android:layout_width="200dp"
-      android:layout_gravity="start"
-     android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/mylinear"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:layout_width="200dp"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/myimage"
+            android:layout_gravity="start"
+            android:src="@drawable/imageone"
+            android:layout_width="200dp"
+            android:layout_height="100dp" />
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginTop="50dp"
+            android:id="@+id/myrecyler_view"
+            android:layout_width="200dp"
+            android:layout_gravity="start"
+            android:layout_height="match_parent">
 
- </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

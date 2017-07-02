@@ -28,6 +28,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
    RecyclerView myrecyler_view;
     DrawerLayout mydrawerlayout;
     ArrayList<Options> options;
-    ImageView mymenu,myswipeimage;
+    ImageView mymenu,myswipeimage,myimage;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -47,7 +48,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             R.drawable.images,
             R.drawable.milestone
     };
-
+    LinearLayout mylinear;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +57,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         myswipeimage = (ImageView)findViewById(R.id.myswipeimage);
         mymenu  = (ImageView)findViewById(R.id.mymenu);
         mymenu.setOnClickListener(MainActivity.this);
+        myimage  = (ImageView)findViewById(R.id.myimage);
+        myimage.setOnClickListener(MainActivity.this);
 
         // Tablayout Setup here...
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -64,7 +67,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tabLayout = (TabLayout)findViewById(R.id.mytabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
-
+        // Left Drawable LinearLayout
+        mylinear = (LinearLayout)findViewById(R.id.mylinear);
         // Recyclerview Setup here...
          myrecyler_view = (RecyclerView)findViewById(R.id.myrecyler_view);
 
@@ -89,7 +93,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                      if (position>=0){
                          String xx = String.valueOf(position);
 
-                         mydrawerlayout.closeDrawer(myrecyler_view);
+                         mydrawerlayout.closeDrawer(mylinear);
                         // mydrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                          //mydrawerlayout.openDrawer(Gravity.START);
                           Toast.makeText(getBaseContext(),"Coming Soon...  "+xx.toString(),Toast.LENGTH_LONG).show();
@@ -101,12 +105,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
             @Override
             public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
             }
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
       }
@@ -181,10 +183,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.mymenu:
-                mydrawerlayout.openDrawer(myrecyler_view);
+                mydrawerlayout.openDrawer(mylinear);
                 //mydrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
               //  mydrawerlayout.openDrawer(Gravity.LEFT);
                 break;
+            case R.id.myimage:
+                mydrawerlayout.closeDrawer(mylinear);
         }
     }
 
