@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.DragEvent;
 import android.view.Gravity;
@@ -35,11 +36,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity implements View.OnClickListener{
-   RecyclerView myrecyler_view;
+public class MainActivity extends FragmentActivity implements View.OnClickListener {
+    RecyclerView myrecyler_view;
     DrawerLayout mydrawerlayout;
     ArrayList<Options> options;
-    ImageView mymenu,myswipeimage,myimage;
+    ImageView mymenu, myswipeimage, myimage;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -49,56 +50,58 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             R.drawable.milestone
     };
     LinearLayout mylinear;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mydrawerlayout = (DrawerLayout)findViewById(R.id.mydrawerlayout);
-        myswipeimage = (ImageView)findViewById(R.id.myswipeimage);
-        mymenu  = (ImageView)findViewById(R.id.mymenu);
+        mydrawerlayout = (DrawerLayout) findViewById(R.id.mydrawerlayout);
+        myswipeimage = (ImageView) findViewById(R.id.myswipeimage);
+        mymenu = (ImageView) findViewById(R.id.mymenu);
         mymenu.setOnClickListener(MainActivity.this);
-        myimage  = (ImageView)findViewById(R.id.myimage);
+        myimage = (ImageView) findViewById(R.id.myimage);
         myimage.setOnClickListener(MainActivity.this);
 
         // Tablayout Setup here...
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
-        tabLayout = (TabLayout)findViewById(R.id.mytabs);
+        tabLayout = (TabLayout) findViewById(R.id.mytabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
         // Left Drawable LinearLayout
-        mylinear = (LinearLayout)findViewById(R.id.mylinear);
+        mylinear = (LinearLayout) findViewById(R.id.mylinear);
         // Recyclerview Setup here...
-         myrecyler_view = (RecyclerView)findViewById(R.id.myrecyler_view);
+        myrecyler_view = (RecyclerView) findViewById(R.id.myrecyler_view);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        //  RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         myrecyler_view.setLayoutManager(layoutManager);
 
         options = new ArrayList<Options>();
-        options.add(new Options("Edit Profile","Edit Profile"));
-        options.add(new Options("Uploads ","Uploads "));
-        options.add(new Options("MyImages","MyImages"));
-        options.add(new Options("Logout","Logout"));
+        options.add(new Options("Edit Profile", "Edit Profile"));
+        options.add(new Options("Uploads ", "Uploads "));
+        options.add(new Options("MyImages", "MyImages"));
+        options.add(new Options("Logout", "Logout"));
 
-        RecyclerView.Adapter adapter = new CustomAdapter(MainActivity.this,options);
+        RecyclerView.Adapter adapter = new CustomAdapter(MainActivity.this, options);
         myrecyler_view.setAdapter(adapter);
         myrecyler_view.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
 
-                View child = rv.findChildViewUnder(e.getX(),e.getY());
-                 if (child != null){
-                     int position = rv.getChildAdapterPosition(child);
-                     if (position>=0){
-                         String xx = String.valueOf(position);
+                View child = rv.findChildViewUnder(e.getX(), e.getY());
+                if (child != null) {
+                    int position = rv.getChildAdapterPosition(child);
+                    if (position >= 0) {
+                        String xx = String.valueOf(position);
 
-                         mydrawerlayout.closeDrawer(mylinear);
+                        mydrawerlayout.closeDrawer(mylinear);
                         // mydrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                         //mydrawerlayout.openDrawer(Gravity.START);
-                          Toast.makeText(getBaseContext(),"Coming Soon...  "+xx.toString(),Toast.LENGTH_LONG).show();
-                     }
-                 }
+                        //mydrawerlayout.openDrawer(Gravity.START);
+                        Toast.makeText(getBaseContext(), "Coming Soon...  " + xx.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
                 return false;
             }
 
@@ -111,13 +114,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
             }
         });
-      }
+    }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(message,new IntentFilter("send"));
+        LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(message, new IntentFilter("send"));
     }
 
     @Override
@@ -125,11 +128,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onPause();
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(message);
     }
+
     private BroadcastReceiver message = new BroadcastReceiver() {
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
         @Override
         public void onReceive(Context context, Intent intent) {
-            int image = intent.getIntExtra("imgsrc",R.id.myswipeimage);
+            int image = intent.getIntExtra("imgsrc", R.id.myswipeimage);
             myswipeimage.setBackground(getResources().getDrawable(image));
         }
     };
@@ -181,11 +185,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.mymenu:
                 mydrawerlayout.openDrawer(mylinear);
                 //mydrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-              //  mydrawerlayout.openDrawer(Gravity.LEFT);
+                //  mydrawerlayout.openDrawer(Gravity.LEFT);
                 break;
             case R.id.myimage:
                 mydrawerlayout.closeDrawer(mylinear);
@@ -193,5 +197,4 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
-
- }
+}
